@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 export const Container = styled.TouchableOpacity`
     width: 45%;
     height: ${Dimensions.get('screen').height / 4}px;
-    background-color: #32383D;
+    background-color: ${props => props.theme.normalProductsBackground};
     margin-top: 5%;
     padding: 5%;
     align-items: center;
@@ -17,7 +17,7 @@ export const FotoCarro = styled.Image`
 `
 
 export const Nome = styled.Text`
-    color: #1BC6B4;
+    color: ${props => props.theme.contrast};
     font-weight: bold;
     font-size: 15px;
     line-height: 35px;

@@ -6,8 +6,8 @@ import { Container, FotoCarro, Nome, Preco } from './styles';
 export default function HomeListProducts({ item }) {
     const navigation = useNavigation()
     return (
-        <Container onPress={() => navigation.navigate('Details')}>
-            <FotoCarro 
+        <Container onPress={() => navigation.navigate('Details', {item: item})}>
+            <FotoCarro
                 source={item.item.imagem}
             />
             <Nome>{item.item.nome}</Nome>

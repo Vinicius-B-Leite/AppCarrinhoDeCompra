@@ -1,12 +1,9 @@
 import styled from 'styled-components/native';
-const colors = {
-    backgroundColor: "#202529",
-    textColor: '#FFF'
-}
+
 
 export const Container = styled.SafeAreaView`
     flex: 1;
-    background-color: ${colors.backgroundColor};
+    background-color: ${props => props.theme.backgroundColor};
     padding: 5%;
 `;
 
@@ -19,14 +16,14 @@ export const Header = styled.View`
 `
 
 export const Name = styled.Text`
-    color: ${colors.textColor};
+    color: ${props => props.theme.textColor};
     font-size: 18px;
 `
 
 export const MostPopular = styled.View``
 
 export const MostPopularTitle = styled.Text`
-    color: ${colors.textColor};
+    color: ${props => props.theme.textColor};
     font-size: 15px;
 `
 
@@ -35,7 +32,7 @@ export const Products = styled.View`
 `
 
 export const ProductsTitle = styled.Text`
-    color: ${colors.textColor};
+    color: ${props => props.theme.textColor};
     font-size: 15px;
     paddingVertical: 5%;
     margin-top: 5%;

@@ -99,6 +99,7 @@ export default function Home() {
                     keyExtractor={item => item.id}
                     renderItem={item => <HomeListProducts  item={item}/>}
                     numColumns={2}
+                    showsVerticalScrollIndicator={false}
                     columnWrapperStyle={{flex: 1, justifyContent: 'space-around'}}
                 />
             </Products>

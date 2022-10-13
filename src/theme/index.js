@@ -1,5 +1,7 @@
 export const darkMode = {
-    backgroundColor: '',
+    backgroundColor: '#202529',
     mostPopularProductBackgroudColor: '#4C555C',
-    textColor: '#fff'
+    normalProductsBackground: '#32383D',
+    textColor: '#fff',
+    contrast: '#1BC6B4'
 }
