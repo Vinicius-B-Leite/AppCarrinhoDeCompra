@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, SafeAreaView, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import bmw from '../../assets/bmw.png'
@@ -7,9 +7,10 @@ import bmw2 from '../../assets/bmw2.png'
 import ferrari from '../../assets/ferrari.png'
 import ferrari2 from '../../assets/ferrari2.png'
 import gol from '../../assets/gol.png'
-import { Container, Header, Name, MostPopular, MostPopularTitle, Products, ProductsTitle } from './styles';
+import { Container, Header, Name, MostPopular, MostPopularTitle, Products, ProductsTitle, Icons } from './styles';
 import PopularProducts from '../../components/PopularProducts';
 import HomeListProducts from '../../components/HomeListProducts';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
 
@@ -72,11 +73,21 @@ export default function Home() {
         },
 
     ])
+    const navigation = useNavigation()
     return (
-        <Container> 
+        <Container>
             <Header>
                 <Name>Olá, Fulano!</Name>
-                <AntDesign name="user" size={28} color="#fff" />
+                <Icons>
+                    <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+                        <AntDesign name="shoppingcart" size={28} color="#fff" />
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity>
+                        <AntDesign name="user" size={28} color="#fff" />
+                    </TouchableOpacity>
+                </Icons>
             </Header>
 
             <MostPopular>
@@ -84,8 +95,8 @@ export default function Home() {
                 <FlatList
                     data={produtosPopulares}
                     keyExtractor={item => item.id}
-                    renderItem={item => <PopularProducts item={item}/>}
-                    ItemSeparatorComponent={()=><View style={{width: '5%'}}></View>}
+                    renderItem={item => <PopularProducts item={item} />}
+                    ItemSeparatorComponent={() => <View style={{ width: '5%' }}></View>}
                     horizontal={true}
                     contentContainerStyle={{ paddingRight: '20%' }}
                     showsHorizontalScrollIndicator={false}
@@ -93,14 +104,14 @@ export default function Home() {
             </MostPopular>
 
             <Products>
-                <ProductsTitle>Nossos Produtos</ProductsTitle>    
+                <ProductsTitle>Nossos Produtos</ProductsTitle>
                 <FlatList
                     data={products}
                     keyExtractor={item => item.id}
-                    renderItem={item => <HomeListProducts  item={item}/>}
+                    renderItem={item => <HomeListProducts item={item} />}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
-                    columnWrapperStyle={{flex: 1, justifyContent: 'space-around'}}
+                    columnWrapperStyle={{ flex: 1, justifyContent: 'space-around' }}
                 />
             </Products>
         </Container>

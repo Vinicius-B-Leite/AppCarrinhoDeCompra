@@ -15,6 +15,12 @@ export const Header = styled.View`
     margin-bottom: 10%;
 `
 
+export const Icons = styled.View`
+    flex-direction: row;
+    width: 25%;
+    justify-content: space-between;
+`
+
 export const Name = styled.Text`
     color: ${props => props.theme.textColor};
     font-size: 18px;
