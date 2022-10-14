@@ -1,39 +1,20 @@
-import React, { useState } from 'react';
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList,TouchableOpacity, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import bmw from '../../assets/bmw.png'
-import bmw2 from '../../assets/bmw2.png'
-import ferrari from '../../assets/ferrari.png'
-import ferrari2 from '../../assets/ferrari2.png'
-import gol from '../../assets/gol.png'
 import { Container, Header, Name, MostPopular, MostPopularTitle, Products, ProductsTitle, Icons } from './styles';
 import PopularProducts from '../../components/PopularProducts';
 import HomeListProducts from '../../components/HomeListProducts';
 import { useNavigation } from '@react-navigation/native';
+import { child, get, limitToFirst, query, ref } from 'firebase/database';
+import { db } from '../../service/firebase';
+
 
 export default function Home() {
-
-    const [produtosPopulares, setPordutosPopulares] = useState([
-        {
-            id: '1',
-            imagem: require('../../assets/gol.png'),
-            nome: 'Need for speed',
-            preco: 1000.99
-        },
-        {
-            id: '2',
-            imagem: require('../../assets/bmw2.png'),
-            nome: 'Carro BMW 2',
-            preco: 800.99
-        },
-        {
-            id: '3',
-            imagem: require('../../assets/ferrari.png'),
-            nome: 'Carro Ferrari',
-            preco: 500.99
-        }
-    ])
+    const navigation = useNavigation()
+    const dbRef = ref(db, 'produtos')
+    
+    const [produtosPopulares, setPordutosPopulares] = useState([])
     const [products, setProducts] = useState([
         {
             id: '1',
@@ -73,7 +54,24 @@ export default function Home() {
         },
 
     ])
-    const navigation = useNavigation()
+
+    useEffect(()=>{
+        function getMostPopularProducts(){
+            get(query(dbRef, limitToFirst(3))).then(response =>{
+                response.forEach(i => {
+                    let data = {
+                        nome: i.val().nome,
+                        imagem: i.val().imagem,
+                        preco: i.val().preco,
+                        id: i.key
+                    }
+                    setPordutosPopulares(oldProducts => [...oldProducts, data])
+                })
+            }).catch(()=>alert("Ops ocorreu um erro"))
+        }
+        
+        getMostPopularProducts()
+    }, [])
     return (
         <Container>
             <Header>
@@ -95,7 +93,7 @@ export default function Home() {
                 <FlatList
                     data={produtosPopulares}
                     keyExtractor={item => item.id}
-                    renderItem={item => <PopularProducts item={item} />}
+                    renderItem={({item}) => <PopularProducts data={item} />}
                     ItemSeparatorComponent={() => <View style={{ width: '5%' }}></View>}
                     horizontal={true}
                     contentContainerStyle={{ paddingRight: '20%' }}
@@ -108,7 +106,7 @@ export default function Home() {
                 <FlatList
                     data={products}
                     keyExtractor={item => item.id}
-                    renderItem={item => <HomeListProducts item={item} />}
+                    renderItem={(item) => <HomeListProducts {...item} />}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                     columnWrapperStyle={{ flex: 1, justifyContent: 'space-around' }}

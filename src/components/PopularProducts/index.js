@@ -3,13 +3,13 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import { Container } from './styles';
 
-export default function PopularProducts(props) {
+export default function PopularProducts({ data }) {
     const navigation = useNavigation()
     return (
-        <Container onPress={()=> navigation.navigate('Details', {item: props.item})}>
+        <Container onPress={() => navigation.navigate('Details', { item: data })}>
             <Image
-                source={props.item.item.imagem}
-                style={{ width: '80%', height: '70%', resizeMode: 'contain' }}
+                source={{ uri: data.imagem }}
+                style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
             />
         </Container>
     );
