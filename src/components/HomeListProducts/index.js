@@ -8,7 +8,7 @@ export default function HomeListProducts({ item }) {
     return (
         <Container onPress={() => navigation.navigate('Details', {item: item})}>
             <FotoCarro
-                source={item.imagem}
+                source={{uri: item.imagem}}
             />
             <Nome>{item.nome}</Nome>
             <Preco> R$ {item.preco}</Preco>
