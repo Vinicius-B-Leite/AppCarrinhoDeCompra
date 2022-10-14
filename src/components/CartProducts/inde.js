@@ -7,17 +7,17 @@ export default function CartProducts({ item }) {
   return (
     <Container>
       <ProductImage
-        source={item.item.imagem}
+        source={{uri: item.imagem}}
       />
       <InfoContainer>
-        <Name>{item.item.nome}</Name>
-        <Price>R$ {item.item.preco}</Price>
+        <Name>{item.nome}</Name>
+        <Price>R$ {item.preco}</Price>
       </InfoContainer>
 
 
       <ContainerAdd>
         <Button><Ionicons name="md-remove" size={15} color="black" /></Button>
-        <ItemQuantity>1</ItemQuantity>
+        <ItemQuantity>{item.quantidade}</ItemQuantity>
         <Button><Ionicons name="add-outline" size={15} color="#000" /></Button>
       </ContainerAdd>
     </Container>
