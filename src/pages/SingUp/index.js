@@ -7,7 +7,7 @@ import { Container, Input, LoginButton, Logo, Main, RegisterButton, TextLoginBut
 
 export default function SingUp() {
     const navigation = useNavigation()
-    const { singUp, isLoadingSingUp } = useContext(AuthContext)
+    const { singUp, isLoading } = useContext(AuthContext)
     const [userName, setUserName] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -24,7 +24,7 @@ export default function SingUp() {
                     singUp(email, password, userName)
                     navigation.goBack()
                 }}>
-                    <TextLoginButton>{isLoadingSingUp ? <ActivityIndicator color="#fff" size={20}/> : 'Cadastrar'}</TextLoginButton>
+                    <TextLoginButton>{isLoading ? <ActivityIndicator color="#fff" size={20}/> : 'Cadastrar'}</TextLoginButton>
                 </LoginButton>
 
             </Main>

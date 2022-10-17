@@ -14,7 +14,7 @@ import { AuthContext } from '../../contexts/auth';
 export default function Home() {
     const navigation = useNavigation()
     const dbRef = ref(db)
-    const { isLogged } = useContext(AuthContext)
+    const { isLogged, user } = useContext(AuthContext)
     const [produtosPopulares, setPordutosPopulares] = useState([])
     const [products, setProducts] = useState([])
 
@@ -51,7 +51,7 @@ export default function Home() {
     return (
         <Container>
             <Header>
-                <Name>Olá, Fulano!</Name>
+                <Name>Olá, {user.name || 'Fulano'}!</Name>
                 <Icons>
                     <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                         <AntDesign name="shoppingcart" size={28} color="#fff" />

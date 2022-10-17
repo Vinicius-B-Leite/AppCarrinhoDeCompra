@@ -1,7 +1,8 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { createContext, useState } from 'react';
-import { auth } from '../service/firebase'
+import { auth, db } from '../service/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { child, get, ref, set } from 'firebase/database';
 
 
 
@@ -9,30 +10,53 @@ export const AuthContext = createContext()
 
 export default function AuthContextProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false)
-    const [isLoadingSingUp, setIsLoadingSingUp] = useState(false)
-
+    const [isLoading, setIsLoading] = useState(false)
+    const [user, setUser] = useState({})
 
     function singUp(email, senha, nome) {
-        setIsLoadingSingUp(true)
-        createUserWithEmailAndPassword(auth, email, senha).then(async(userCredential) => {
+        setIsLoading(true)
+        createUserWithEmailAndPassword(auth, email, senha).then(async (userCredential) => {
             let data = {
                 email: userCredential.user.email,
                 password: senha,
                 uid: userCredential.user.uid,
                 name: nome
             }
-            await AsyncStorage.setItem('_user', JSON.stringify(data)).then(() => {
-                setIsLogged(true)
-                setIsLoadingSingUp(false)
-            })
-        }).catch((error)=>{
+            set(ref(db, 'users/' + data.uid), data)
+            setIsLoading(false)
+        }).catch((error) => {
             alert('Ops ocorreu um erro ' + error)
-            setIsLoadingSingUp(false)
+            setIsLoading(false)
         })
     }
 
+    async function logIn(email, senha, goBack) {
+
+        setIsLoading(true)
+
+        signInWithEmailAndPassword(auth, email, senha).then(async (userCredential) => {
+
+            let getName  = await get(child(ref(db), 'users/' + userCredential.user.uid))
+            let data = {
+                email: userCredential.user.email,
+                password: senha,
+                uid: userCredential.user.uid,
+                name: getName.val().name
+            }
+            await AsyncStorage.setItem('_user', JSON.stringify(data)).then(() => {
+                setIsLogged(true)
+                setUser(data)
+                setIsLoading(false)
+                goBack()
+            })
+
+        }).catch((error) => {
+            alert('Ops ocorreu um erro ' + error)
+            setIsLoading(false)
+        })
+    }
     return (
-        <AuthContext.Provider value={{ isLogged, singUp }}>
+        <AuthContext.Provider value={{ isLogged, singUp, isLoading, logIn, user }}>
             {children}
         </AuthContext.Provider>
     )
