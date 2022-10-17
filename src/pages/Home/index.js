@@ -58,7 +58,7 @@ export default function Home() {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity onPress={() => isLogged ? navigation.navigate('Profile') : navigation.navigate('LogIn')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
                         <AntDesign name="user" size={28} color="#fff" />
                     </TouchableOpacity>
                 </Icons>
