@@ -6,6 +6,7 @@ import Home from '../pages/Home'
 import Details from '../pages/Details';
 import Cart from '../pages/Cart';
 import LogIn from '../pages/LogIn';
+import SingUp from '../pages/SingUp';
 
 
 const Stack = createNativeStackNavigator()
@@ -18,6 +19,7 @@ export default function Routes() {
                 <Stack.Screen name='Details' component={Details} options={DetailsOptions} />
                 <Stack.Screen name='Cart' component={Cart} options={CartOptions} />
                 <Stack.Screen name='LogIn' component={LogIn}  options={{ headerShown: false }}/>
+                <Stack.Screen name='SingUp' component={SingUp}  options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

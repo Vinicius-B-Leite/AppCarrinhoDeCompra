@@ -16,13 +16,16 @@ export const Main = styled.View`
     width: 90%;
     height: 40%;
 `
-export const Input = styled.TextInput`
+export const Input = styled.TextInput.attrs({
+    placeholderTextColor: '#d3d3d3'
+})`
     border-width: 1px;
     width: 100%;
-    height: 15%;
     border-color: ${props => props.theme.textColor};
     margin-top: 5%;
     border-radius: 5px;
+    padding: 2%;
+    color: #fff;
 `
 export const LoginButton = styled.TouchableOpacity`
     background-color: ${props => props.theme.contrast};
@@ -44,5 +47,4 @@ export const RegisterButton = styled.TouchableOpacity`
 `
 export const TextRegisterButton = styled.Text`
     color: ${props => props.theme.textColor};
-    text-decoration: dotted;
 `
