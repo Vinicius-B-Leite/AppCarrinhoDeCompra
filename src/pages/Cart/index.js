@@ -1,18 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import CartProducts from '../../components/CartProducts/inde';
 import { BuyButton, BuyContainer, Container, ItemFeedback, Price, TextButton, Total, TotalContainer } from './styles';
-import { get, onValue, ref } from 'firebase/database'
+import { get, onValue, ref, remove, update } from 'firebase/database'
 import { db } from '../../service/firebase'
 
 export default function Cart() {
     const [cartProducts, setCartProducts] = useState([])
     const [total, setTotal] = useState(0)
 
+    function addOneMore(item) {
+        update(ref(db, 'carrinho/uid01/' + item.id), { quantidade: item.quantidade + 1 }).then(() => {
+
+            let index = cartProducts.indexOf(item)
+            let newList = cartProducts
+            newList[index].quantidade = item.quantidade + 1
+            setTotal(oldTotal => oldTotal += item.preco)
+            setCartProducts([...newList])
+        })
+    }
+
+    function removeOne(item) {
+        let index = cartProducts.indexOf(item)
+        let newList = cartProducts
+
+        if (item.quantidade === 1) {
+            remove(ref(db, 'carrinho/uid01/' + item.id)).then(() => {
+                newList = newList.filter(i => i.id !== item.id)
+                setCartProducts([...newList])
+                setTotal(oldTotal => oldTotal -= item.preco)
+            })
+            return
+        }
+
+        update(ref(db, 'carrinho/uid01/' + item.id), { quantidade: item.quantidade - 1 }).then(() => {
+
+            newList[index].quantidade = item.quantidade - 1
+            setTotal(oldTotal => oldTotal -= item.preco)
+            setCartProducts([...newList])
+        })
+    }
+
     useEffect(() => {
         function setCartProductsState(itemKey, quantity) {
             get(ref(db, 'produtos/' + itemKey)).then(snaps => {
-                
+
                 let data = {
                     id: itemKey,
                     imagem: snaps.val().imagem,
@@ -31,8 +63,9 @@ export default function Cart() {
                 let quantity = item.val().quantidade
                 setCartProductsState(itemKey, quantity)
             })
-        })
+        }, { onlyOnce: true })
     }, [])
+
 
     return (
         <Container>
@@ -40,14 +73,16 @@ export default function Cart() {
                 <ItemFeedback>{cartProducts && cartProducts.length} items</ItemFeedback>
                 <FlatList
                     data={cartProducts}
-                    renderItem={({ item }) => <CartProducts item={item} />}
+                    key={item => item.id}
+                    extraData={cartProducts}
+                    renderItem={({ item }) => <CartProducts item={item} addOneMore={addOneMore} removeOne={removeOne} />}
                     style={{ height: '70%' }}
                 />
             </View>
             <BuyContainer>
                 <TotalContainer>
                     <Total>Total</Total>
-                    <Price>R$ {total}</Price>
+                    <Price>R$ {total.toFixed(2)}</Price>
                 </TotalContainer>
                 <BuyButton>
                     <TextButton>Comprar</TextButton>

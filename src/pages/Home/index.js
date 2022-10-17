@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, TouchableOpacity, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -8,12 +8,13 @@ import HomeListProducts from '../../components/HomeListProducts';
 import { useNavigation } from '@react-navigation/native';
 import { child, get, limitToFirst, query, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
+import { AuthContext } from '../../contexts/auth';
 
 
 export default function Home() {
     const navigation = useNavigation()
     const dbRef = ref(db)
-
+    const { isLogged } = useContext(AuthContext)
     const [produtosPopulares, setPordutosPopulares] = useState([])
     const [products, setProducts] = useState([])
 
@@ -42,7 +43,7 @@ export default function Home() {
                     }
                     setProducts(oldProducts => [...oldProducts, data])
                 })
-            }).catch(()=>alert('Ops ocorreu um erro'))
+            }).catch(() => alert('Ops ocorreu um erro'))
         }
         getAllProducts()
         getMostPopularProducts()
@@ -57,7 +58,7 @@ export default function Home() {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => isLogged ? navigation.navigate('Profile') : navigation.navigate('LogIn')}>
                         <AntDesign name="user" size={28} color="#fff" />
                     </TouchableOpacity>
                 </Icons>
@@ -81,7 +82,7 @@ export default function Home() {
                 <FlatList
                     data={products}
                     keyExtractor={item => item.id}
-                    renderItem={({item}) => <HomeListProducts item={item} />}
+                    renderItem={({ item }) => <HomeListProducts item={item} />}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                     columnWrapperStyle={{ flex: 1, justifyContent: 'space-around' }}
