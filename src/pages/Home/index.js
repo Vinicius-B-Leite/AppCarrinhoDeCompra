@@ -10,6 +10,7 @@ import { child, get, limitToFirst, query, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
 import { AuthContext } from '../../contexts/auth';
 import AlertModal from '../../components/AlertModal'
+import Skeleton from './Skeleton';
 
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
     const { isLogged, user } = useContext(AuthContext)
     const [produtosPopulares, setPordutosPopulares] = useState([])
     const [products, setProducts] = useState([])
+    const [isDataLoading, setIsDataLoading] = useState(null)
 
     useEffect(() => {
         function getMostPopularProducts() {
@@ -32,9 +34,11 @@ export default function Home() {
                     }
                     setPordutosPopulares(oldProducts => [...oldProducts, data])
                 })
+                setIsDataLoading(false)
             }).catch(() => alert("Ops ocorreu um erro"))
         }
         function getAllProducts() {
+            setIsDataLoading(true)
             get(child(dbRef, 'produtos')).then(snapshot => {
                 snapshot.forEach(i => {
                     let data = {
@@ -51,6 +55,7 @@ export default function Home() {
         getMostPopularProducts()
     }, [])
     return (
+        isDataLoading ? <Skeleton/> :
         <Container>
             <Header>
                 <Name>Olá, {user.name || 'Fulano'}!</Name>
