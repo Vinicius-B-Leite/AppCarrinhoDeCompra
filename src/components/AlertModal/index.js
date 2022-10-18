@@ -19,7 +19,7 @@ export default function AlertModal({ visible, setVisible }) {
                 <S.Main>
                     <S.Container>
                         <S.Title>Atenção</S.Title>
-                        <S.Description>Para adicionar itens no carrinho é necessário realizar o login</S.Description>
+                        <S.Description>Para usar esta funcionalidade é necessário realizar o login</S.Description>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <S.CancelButton onPress={() => setVisible(false)}>

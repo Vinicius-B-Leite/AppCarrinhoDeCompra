@@ -9,11 +9,13 @@ import { useNavigation } from '@react-navigation/native';
 import { child, get, limitToFirst, query, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
 import { AuthContext } from '../../contexts/auth';
+import AlertModal from '../../components/AlertModal'
 
 
 export default function Home() {
     const navigation = useNavigation()
     const dbRef = ref(db)
+    const [modalVisible, setModalVisible] = useState(false)
     const { isLogged, user } = useContext(AuthContext)
     const [produtosPopulares, setPordutosPopulares] = useState([])
     const [products, setProducts] = useState([])
@@ -53,7 +55,7 @@ export default function Home() {
             <Header>
                 <Name>Olá, {user.name || 'Fulano'}!</Name>
                 <Icons>
-                    <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+                    <TouchableOpacity onPress={() => isLogged ? navigation.navigate('Cart') : setModalVisible(true)}>
                         <AntDesign name="shoppingcart" size={28} color="#fff" />
                     </TouchableOpacity>
 
@@ -88,6 +90,7 @@ export default function Home() {
                     columnWrapperStyle={{ flex: 1, justifyContent: 'space-around' }}
                 />
             </Products>
+            <AlertModal visible={modalVisible} setVisible={setModalVisible}/>
         </Container>
     );
 }

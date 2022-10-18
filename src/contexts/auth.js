@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { auth, db } from '../service/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { child, get, ref, set } from 'firebase/database';
@@ -12,6 +12,20 @@ export default function AuthContextProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [user, setUser] = useState({})
+
+    useEffect(()=>{
+
+        async function getAsyncStorage(){
+            AsyncStorage.getItem('_user').then(data => {
+                
+                data && setUser(JSON.parse(data))
+                
+            })
+        }
+
+        getAsyncStorage()
+
+    }, [])
 
     function singUp(email, senha, nome) {
         setIsLoading(true)
