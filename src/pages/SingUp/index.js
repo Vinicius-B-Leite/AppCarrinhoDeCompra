@@ -20,10 +20,7 @@ export default function SingUp() {
                 <Input value={email} onChangeText={(text) => setEmail(text)} placeholder="Digite seu email" />
                 <Input value={password} onChangeText={(text) => setPassword(text)} placeholder="Digite sua senha" />
 
-                <LoginButton onPress={() => {
-                    singUp(email, password, userName)
-                    navigation.goBack()
-                }}>
+                <LoginButton onPress={() => singUp(email, password, userName, () => navigation.goBack())}>
                     <TextLoginButton>{isLoading ? <ActivityIndicator color="#fff" size={20}/> : 'Cadastrar'}</TextLoginButton>
                 </LoginButton>
 

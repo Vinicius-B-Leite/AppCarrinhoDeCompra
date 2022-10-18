@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import React, { createContext, useEffect, useState } from 'react';
 import { auth, db } from '../service/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,7 +18,10 @@ export default function AuthContextProvider({ children }) {
         async function getAsyncStorage(){
             AsyncStorage.getItem('_user').then(data => {
                 
-                data && setUser(JSON.parse(data))
+                if (data) {
+                    setUser(JSON.parse(data))
+                    setIsLogged(true)
+                }
                 
             })
         }
@@ -27,7 +30,7 @@ export default function AuthContextProvider({ children }) {
 
     }, [])
 
-    function singUp(email, senha, nome) {
+    function singUp(email, senha, nome, goBack) {
         setIsLoading(true)
         createUserWithEmailAndPassword(auth, email, senha).then(async (userCredential) => {
             let data = {
@@ -38,13 +41,14 @@ export default function AuthContextProvider({ children }) {
             }
             set(ref(db, 'users/' + data.uid), data)
             setIsLoading(false)
+            goBack()
         }).catch((error) => {
             alert('Ops ocorreu um erro ' + error)
             setIsLoading(false)
         })
     }
 
-    async function logIn(email, senha, goBack) {
+    function logIn(email, senha, goBack) {
 
         setIsLoading(true)
 
@@ -69,8 +73,18 @@ export default function AuthContextProvider({ children }) {
             setIsLoading(false)
         })
     }
+
+    function logout(){
+        signOut(auth).then( ()=>{
+            AsyncStorage.clear().then(()=>{
+                setUser({})
+                setIsLogged(false)
+            })
+        }).catch(() => alert("Ops deu erro em deslogar"))
+    }
+
     return (
-        <AuthContext.Provider value={{ isLogged, singUp, isLoading, logIn, user }}>
+        <AuthContext.Provider value={{ isLogged, singUp, isLoading, logIn, user, logout }}>
             {children}
         </AuthContext.Provider>
     )

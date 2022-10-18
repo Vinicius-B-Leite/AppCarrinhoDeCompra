@@ -11,15 +11,20 @@ import { db } from '../../service/firebase';
 import { AuthContext } from '../../contexts/auth';
 import AlertModal from '../../components/AlertModal'
 import Skeleton from './Skeleton';
+import Popup from '../../components/Popup';
 
 
 export default function Home() {
-    const navigation = useNavigation()
     const dbRef = ref(db)
-    const [modalVisible, setModalVisible] = useState(false)
+    const navigation = useNavigation()
     const { isLogged, user } = useContext(AuthContext)
+
+    const [modalVisible, setModalVisible] = useState(false)
+    const [popupVisible, setPopupVisible] = useState(false)
+
     const [produtosPopulares, setPordutosPopulares] = useState([])
     const [products, setProducts] = useState([])
+
     const [isDataLoading, setIsDataLoading] = useState(null)
 
     useEffect(() => {
@@ -65,7 +70,7 @@ export default function Home() {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
+                    <TouchableOpacity onPress={() => isLogged ? setPopupVisible(!popupVisible) : navigation.navigate('LogIn')}>
                         <AntDesign name="user" size={28} color="#fff" />
                     </TouchableOpacity>
                 </Icons>
@@ -95,6 +100,7 @@ export default function Home() {
                     columnWrapperStyle={{ flex: 1, justifyContent: 'space-around' }}
                 />
             </Products>
+            <Popup popupVisible={popupVisible} setPopupVisible={setPopupVisible}/>
             <AlertModal visible={modalVisible} setVisible={setModalVisible}/>
         </Container>
     );
