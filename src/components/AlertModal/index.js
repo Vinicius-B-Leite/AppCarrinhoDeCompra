@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Modal, TouchableWithoutFeedback, View } from 'react-native';
 import * as S from './styles'
@@ -5,6 +6,9 @@ import * as S from './styles'
 
 
 export default function AlertModal({ visible, setVisible }) {
+
+    const navigation = useNavigation()
+
     return (
         <Modal
             animationType="slide"
@@ -25,7 +29,7 @@ export default function AlertModal({ visible, setVisible }) {
                             <S.CancelButton onPress={() => setVisible(false)}>
                                 <S.TextCancelButton>Cancelar</S.TextCancelButton>
                             </S.CancelButton>
-                            <S.LoginButton>
+                            <S.LoginButton onPress={() => navigation.navigate('LogIn')}>
                                 <S.TextLoginButton>Login</S.TextLoginButton>
                             </S.LoginButton>
                         </View>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, TouchableOpacity, View } from 'react-native';
+import {  FlatList, TouchableOpacity, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import { Container, Header, Name, MostPopular, MostPopularTitle, Products, ProductsTitle, Icons } from './styles';
