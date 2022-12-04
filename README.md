@@ -21,7 +21,7 @@ Aqui está as tecnologias usadas no projeto
 
 ## Como usar
 
-  [![Clique para ver o vídeo]](github/V%C3%ADdeo%20sem%20t%C3%ADtulo%20%E2%80%90%20Feito%20com%20o%20Clipchamp.mp4)
+  ![video](github/animacao.gif)
 
 ## Funcionalidades
 
